@@ -143,7 +143,7 @@ public class CPedido {
     }
     public void obtenerDatosCompletos(String codigo) {
         BD.Database objetoConexion = new BD.Database();
-        String sql = "SELECT nombre, precio FROM prueba160225.menu WHERE codigo = CAST(? AS INTEGER)";
+        String sql = "SELECT nombre, precio, observaciones, fechahora, usuario_documento, mesa_idmesa, productomenú_idproducto_menú FROM prueba160225.menu WHERE codigo = CAST(? AS INTEGER)";
 
         try {
             PreparedStatement ps = objetoConexion.establecerConexion().prepareStatement(sql);
@@ -153,7 +153,12 @@ public class CPedido {
             if (rs.next()) {
                 String nombre = rs.getString("nombre");
                 double precio = rs.getDouble("precio");
-                        PedidoInstance.mostrarDatoFormulario(codigo, nombre, precio);
+                String observaciones = rs.getString("observaciones");
+                String fechahora = rs.getString("fechahora");
+                int usuario_documento = rs.getInt("usuario_documento");
+                int mesa_idmesa = rs.getInt("mesa_idmesa");
+                int productomenú_idproducto_menú = rs.getInt("productomenú_idproducto_menú");
+                PedidoInstance.mostrarDatoFormulario(codigo, nombre, precio, observaciones, fechahora, usuario_documento, mesa_idmesa, productomenú_idproducto_menú);
             }
 
             rs.close();
@@ -174,18 +179,28 @@ public void enviarPedido(JTable jTable3) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         
         // Now insert all rows from the table
-        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total, observaciones, fechahora, usuario_documento, mesa_idmesa, productomenú_idproducto_menú) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < model.getRowCount(); i++) {
                 String nombre = model.getValueAt(i, 0).toString();
                 int cantidad = Integer.parseInt(model.getValueAt(i, 1).toString());
                 String unidad = model.getValueAt(i, 2).toString();
                 double total = Double.parseDouble(model.getValueAt(i, 3).toString());
+                String observaciones = model.getValueAt(i, 4).toString();
+                String fechahora = model.getValueAt(i, 5).toString();
+                int usuario_documento = Integer.parseInt(model.getValueAt(i, 6).toString());
+                int mesa_idmesa = Integer.parseInt(model.getValueAt(i, 7).toString());
+                int productomenú_idproducto_menú = Integer.parseInt(model.getValueAt(i, 8).toString());
 
                 ps.setString(1, nombre);
                 ps.setInt(2, cantidad);
                 ps.setString(3, unidad);
                 ps.setDouble(4, total);
+                ps.setString(5, observaciones);
+                ps.setString(6, fechahora);
+                ps.setInt(7, usuario_documento);
+                ps.setInt(8, mesa_idmesa);
+                ps.setInt(9, productomenú_idproducto_menú);
 
                 ps.executeUpdate();
                 
@@ -193,7 +208,7 @@ public void enviarPedido(JTable jTable3) {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id = generatedKeys.getInt(1);
-                    model.setValueAt(id, i, 4); // Store ID in hidden column
+                    model.setValueAt(id, i, 9); // Store ID in hidden column
                 }
             }
         }
@@ -214,18 +229,28 @@ public void guardarPedido(JTable jTable3) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         
         // Now insert all rows from the table
-        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total, observaciones, fechahora, usuario_documento, mesa_idmesa, productomenú_idproducto_menú) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < model.getRowCount(); i++) {
                 String nombre = model.getValueAt(i, 0).toString();
                 int cantidad = Integer.parseInt(model.getValueAt(i, 1).toString());
                 String unidad = model.getValueAt(i, 2).toString();
                 double total = Double.parseDouble(model.getValueAt(i, 3).toString());
+                String observaciones = model.getValueAt(i, 4).toString();
+                String fechahora = model.getValueAt(i, 5).toString();
+                int usuario_documento = Integer.parseInt(model.getValueAt(i, 6).toString());
+                int mesa_idmesa = Integer.parseInt(model.getValueAt(i, 7).toString());
+                int productomenú_idproducto_menú = Integer.parseInt(model.getValueAt(i, 8).toString());
 
                 ps.setString(1, nombre);
                 ps.setInt(2, cantidad);
                 ps.setString(3, unidad);
                 ps.setDouble(4, total);
+                ps.setString(5, observaciones);
+                ps.setString(6, fechahora);
+                ps.setInt(7, usuario_documento);
+                ps.setInt(8, mesa_idmesa);
+                ps.setInt(9, productomenú_idproducto_menú);
 
                 ps.executeUpdate();
                 
@@ -233,7 +258,7 @@ public void guardarPedido(JTable jTable3) {
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id = generatedKeys.getInt(1);
-                    model.setValueAt(id, i, 4); // Store ID in hidden column
+                    model.setValueAt(id, i, 9); // Store ID in hidden column
                 }
             }
         }
@@ -254,7 +279,7 @@ public void actualizarCantidadEnBD(String nombreProducto, int cantidad, int rowI
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         
         // Get the database ID from the hidden column
-        Object idObj = model.getValueAt(rowIndex, 4);
+        Object idObj = model.getValueAt(rowIndex, 9);
         
         if (idObj == null) {
             // This row hasn't been saved to the database yet
@@ -306,7 +331,7 @@ public void actualizarCantidadEnBD(String nombre, int cantidad, int row, JTable 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         
         // Get the database ID from the hidden column
-        Object idObj = model.getValueAt(row, 4);
+        Object idObj = model.getValueAt(row, 9);
         
         if (idObj == null) {
             // This row hasn't been saved to the database yet
