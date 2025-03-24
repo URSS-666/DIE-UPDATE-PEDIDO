@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private final String url = "jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:6543/postgres?user=postgres.qcnpimlavaemqxwftame&password=21Jeimy2003*";
+    private final String url = "jdbc:postgresql://localhost:5432/prueba160225";
     private final String user = "postgres";
-    private final String password = "21Jeimy2003*";
+    private final String password = "your_password";
 
     private Connection conectar = null;
 
@@ -41,27 +41,3 @@ public class Database {
         db.cerrarConexion();
     }
 }
-
-
-/*
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-public class ConexionDB {
-    private static final String URL = "jdbc:postgresql://neondb_owner:npg_1PT9UoImWXpY@ep-misty-unit-a5pxescf-pooler.us-east-2.aws.neon.tech/prueba160225neon?sslmode=require";
-    private static final String USUARIO = "neondb_owner";
-    private static final String CONTRASEÑA = "npg_1PT9UoImWXpY";
-
-    public static Connection conectar() {
-        try {
-            return DriverManager.getConnection(URL, USUARIO, CONTRASEÑA);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-}
-
-
-*/

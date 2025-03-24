@@ -174,7 +174,7 @@ public void enviarPedido(JTable jTable3) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         
         // Now insert all rows from the table
-        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO prueba160225.pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < model.getRowCount(); i++) {
                 String nombre = model.getValueAt(i, 0).toString();
@@ -214,7 +214,7 @@ public void guardarPedido(JTable jTable3) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         
         // Now insert all rows from the table
-        String insertSQL = "INSERT INTO pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO prueba160225.pedido (nombre, cantidad, unidad, total) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < model.getRowCount(); i++) {
                 String nombre = model.getValueAt(i, 0).toString();
@@ -266,7 +266,7 @@ public void actualizarCantidadEnBD(String nombreProducto, int cantidad, int rowI
         Connection conn = objetoConexion.establecerConexion();
         
         // First, get the current unit price
-        String selectSql = "SELECT unidad FROM pedido WHERE id = ?";
+        String selectSql = "SELECT unidad FROM prueba160225.pedido WHERE id = ?";
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
         selectStmt.setInt(1, id);
         ResultSet rs = selectStmt.executeQuery();
@@ -276,7 +276,7 @@ public void actualizarCantidadEnBD(String nombreProducto, int cantidad, int rowI
             double nuevoTotal = cantidad * unidad;
             
             // Update by ID to ensure only this specific row is updated
-            String updateSql = "UPDATE pedido SET cantidad = ?, total = ? WHERE id = ?";
+            String updateSql = "UPDATE prueba160225.pedido SET cantidad = ?, total = ? WHERE id = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateSql);
             updateStmt.setInt(1, cantidad);
             updateStmt.setDouble(2, nuevoTotal);
@@ -318,7 +318,7 @@ public void actualizarCantidadEnBD(String nombre, int cantidad, int row, JTable 
         Connection conn = objetoConexion.establecerConexion();
         
         // First, get the current unit price
-        String selectSql = "SELECT unidad FROM pedido WHERE id = ?";
+        String selectSql = "SELECT unidad FROM prueba160225.pedido WHERE id = ?";
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
         selectStmt.setInt(1, id);
         ResultSet rs = selectStmt.executeQuery();
@@ -328,7 +328,7 @@ public void actualizarCantidadEnBD(String nombre, int cantidad, int row, JTable 
             double nuevoTotal = cantidad * unidad;
             
             // Update by ID to ensure only this specific row is updated
-            String updateSql = "UPDATE pedido SET cantidad = ?, total = ? WHERE id = ?";
+            String updateSql = "UPDATE prueba160225.pedido SET cantidad = ?, total = ? WHERE id = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateSql);
             updateStmt.setInt(1, cantidad);
             updateStmt.setDouble(2, nuevoTotal);
@@ -369,7 +369,7 @@ public void actualizarCantidadDirecta(String nombre, int cantidad) {
         Connection conn = objetoConexion.establecerConexion();
         
         // First find the product in the pedido table
-        String selectSql = "SELECT id, unidad FROM pedido WHERE nombre = ?";
+        String selectSql = "SELECT id, unidad FROM prueba160225.pedido WHERE nombre = ?";
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
         selectStmt.setString(1, nombre);
         ResultSet rs = selectStmt.executeQuery();
@@ -380,7 +380,7 @@ public void actualizarCantidadDirecta(String nombre, int cantidad) {
             double nuevoTotal = cantidad * unidad;
             
             // Update quantity and total
-            String updateSql = "UPDATE pedido SET cantidad = ?, total = ? WHERE id = ?";
+            String updateSql = "UPDATE prueba160225.pedido SET cantidad = ?, total = ? WHERE id = ?";
             PreparedStatement updateStmt = conn.prepareStatement(updateSql);
             updateStmt.setInt(1, cantidad);
         updateStmt.setDouble(2, nuevoTotal);
