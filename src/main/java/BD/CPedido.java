@@ -399,3 +399,13 @@ updateStmt.close();
 }
 }
 // DIEGO14.03.25:
+
+public void eliminarFilasSeleccionadas(JTable jTable3) {
+    DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+    for (int i = model.getRowCount() - 1; i >= 0; i--) {
+        Boolean isSelected = (Boolean) model.getValueAt(i, 0);
+        if (isSelected != null && isSelected) {
+            model.removeRow(i);
+        }
+    }
+}

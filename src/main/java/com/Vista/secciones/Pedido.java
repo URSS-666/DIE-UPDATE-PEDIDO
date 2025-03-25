@@ -159,6 +159,7 @@ public class Pedido extends javax.swing.JPanel {
         jScrollPane11 = new javax.swing.JScrollPane();
         PanelAdicional = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
+        jButtonEliminar = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -346,9 +347,16 @@ public class Pedido extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nombre", "Cantidad", "IVU", "Total"
+                "Seleccionar", "Nombre", "Cantidad", "IVU", "Total"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Double.class
+            };
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jTable3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTable3.setGridColor(new java.awt.Color(204, 204, 204));
         jTable3.setRowHeight(30);
@@ -363,6 +371,15 @@ public class Pedido extends javax.swing.JPanel {
 
         jTextAreaM.setColumns(20);
         jTextAreaM.setRows(5);
+
+        jButtonEliminar.setBackground(new java.awt.Color(255, 51, 51));
+        jButtonEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonEliminar.setText("Eliminar Seleccionados");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -397,7 +414,10 @@ public class Pedido extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButtonEliminar)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -415,7 +435,9 @@ public class Pedido extends javax.swing.JPanel {
                     .addComponent(jTextAreaM, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonEliminar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton6))
@@ -887,8 +909,8 @@ public class Pedido extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(616, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGap(0, 60, Short.MAX_VALUE)
                     .addComponent(Seccion, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -946,7 +968,7 @@ public class Pedido extends javax.swing.JPanel {
 
        // Actualizar la tabla con la nueva fila
        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
-       model.addRow(new Object[]{nombre, cantidad, precioUnitario, total});
+       model.addRow(new Object[]{false, nombre, cantidad, precioUnitario, total});
 
        // Ocultar los paneles
        Cubierta2.setVisible(false);
@@ -972,16 +994,17 @@ public class Pedido extends javax.swing.JPanel {
         // Create a temporary table with the same data but proper column structure
         DefaultTableModel currentModel = (DefaultTableModel) jTable3.getModel();
         DefaultTableModel tempModel = new DefaultTableModel(
-            new String[]{"Nombre", "Cantidad", "IVU", "Total", "ID"}, 0);
+            new String[]{"Seleccionar", "Nombre", "Cantidad", "IVU", "Total", "ID"}, 0);
             
         // Copy all rows from the existing table to the temporary table
         for (int i = 0; i < currentModel.getRowCount(); i++) {
-            Object[] rowData = new Object[5];
-            rowData[0] = currentModel.getValueAt(i, 0);  // Nombre
-            rowData[1] = currentModel.getValueAt(i, 1);  // Cantidad
-            rowData[2] = currentModel.getValueAt(i, 2);  // IVU
-            rowData[3] = currentModel.getValueAt(i, 3);  // Total
-            rowData[4] = "0";  // Default ID or placeholder
+            Object[] rowData = new Object[6];
+            rowData[0] = currentModel.getValueAt(i, 0);  // Seleccionar
+            rowData[1] = currentModel.getValueAt(i, 1);  // Nombre
+            rowData[2] = currentModel.getValueAt(i, 2);  // Cantidad
+            rowData[3] = currentModel.getValueAt(i, 3);  // IVU
+            rowData[4] = currentModel.getValueAt(i, 4);  // Total
+            rowData[5] = "0";  // Default ID or placeholder
             tempModel.addRow(rowData);
         }
         
@@ -989,6 +1012,7 @@ public class Pedido extends javax.swing.JPanel {
         JTable tempTable = new JTable(tempModel);
         
         // Send the order with the properly structured table
+        objetoPedido.eliminarFilasSeleccionadas(tempTable);
         objetoPedido.guardarPedido(tempTable);
         
         
@@ -1047,16 +1071,17 @@ public class Pedido extends javax.swing.JPanel {
         // Create a temporary table with the same data structure as needed by database
         DefaultTableModel currentModel = (DefaultTableModel) jTable3.getModel();
         DefaultTableModel tempModel = new DefaultTableModel(
-            new String[]{"Nombre", "Cantidad", "IVU", "Total", "ID"}, 0);
+            new String[]{"Seleccionar", "Nombre", "Cantidad", "IVU", "Total", "ID"}, 0);
             
         // Copy all rows from the existing table to ensure persistence
         for (int i = 0; i < currentModel.getRowCount(); i++) {
-            Object[] rowData = new Object[5];
-            rowData[0] = currentModel.getValueAt(i, 0);  // Nombre
-            rowData[1] = currentModel.getValueAt(i, 1);  // Cantidad
-            rowData[2] = currentModel.getValueAt(i, 2);  // IVU
-            rowData[3] = currentModel.getValueAt(i, 3);  // Total
-            rowData[4] = null;
+            Object[] rowData = new Object[6];
+            rowData[0] = currentModel.getValueAt(i, 0);  // Seleccionar
+            rowData[1] = currentModel.getValueAt(i, 1);  // Nombre
+            rowData[2] = currentModel.getValueAt(i, 2);  // Cantidad
+            rowData[3] = currentModel.getValueAt(i, 3);  // IVU
+            rowData[4] = currentModel.getValueAt(i, 4);  // Total
+            rowData[5] = null;
             tempModel.addRow(rowData);
         }
         
@@ -1064,6 +1089,7 @@ public class Pedido extends javax.swing.JPanel {
         JTable tempTable = new JTable(tempModel);
         
         // Send the order with the properly structured table
+        objetoPedido.eliminarFilasSeleccionadas(tempTable);
         objetoPedido.guardarPedido(tempTable);
         
        
@@ -1138,10 +1164,10 @@ public class Pedido extends javax.swing.JPanel {
             double total = 0.0;
 
             for (int i = 0; i < df.getRowCount(); i++) {
-                String nombre = df.getValueAt(i, 0).toString(); // Nombre del pedido
-                String cantidad = df.getValueAt(i, 1).toString(); // Cantidad
-                String unidad = df.getValueAt(i, 2).toString(); // Unidad
-                String precio = df.getValueAt(i, 3).toString(); // Precio
+                String nombre = df.getValueAt(i, 1).toString(); // Nombre del pedido
+                String cantidad = df.getValueAt(i, 2).toString(); // Cantidad
+                String unidad = df.getValueAt(i, 3).toString(); // Unidad
+                String precio = df.getValueAt(i, 4).toString(); // Precio
 
                jTextArea1.append("  " + nombre + "\t" + cantidad + "\t" + unidad + "\t $" + precio + "\n");
 
@@ -1227,6 +1253,10 @@ public class Pedido extends javax.swing.JPanel {
 // DIEGO14.03.25:
 
     }//GEN-LAST:event_jLabel17MouseClicked
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        objetoPedido.eliminarFilasSeleccionadas(jTable3);
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
     
     public void desabilitarformulario(){
         PanelCubierta.setVisible(false);
@@ -1294,14 +1324,14 @@ public class Pedido extends javax.swing.JPanel {
         
         // Configurar el editor para la columna de cantidad (índice 1)
         SpinnerEditor editor = new SpinnerEditor();
-        jTable3.getColumnModel().getColumn(1).setCellEditor(editor);
+        jTable3.getColumnModel().getColumn(2).setCellEditor(editor);
         
         // Configurar el renderer para la columna de cantidad para que siempre muestre el spinner
-        jTable3.getColumnModel().getColumn(1).setCellRenderer(new SpinnerRenderer());
+        jTable3.getColumnModel().getColumn(2).setCellRenderer(new SpinnerRenderer());
         
         // Agregar un listener para detectar cambios en el modelo de la tabla
         model.addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE && e.getColumn() == 1) {
+            if (e.getType() == TableModelEvent.UPDATE && e.getColumn() == 2) {
                 int row = e.getFirstRow();
                 // Solo actualizar el cálculo del total en la interfaz
                 updateTotal(row);
@@ -1391,10 +1421,10 @@ public class Pedido extends javax.swing.JPanel {
     // Método para actualizar el total de una fila específica
     private void updateTotal(int row) {
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
-        int cantidad = (int) model.getValueAt(row, 1);
-        float precioUnitario = (float) model.getValueAt(row, 2);
+        int cantidad = (int) model.getValueAt(row, 2);
+        float precioUnitario = (float) model.getValueAt(row, 3);
         double total = cantidad * precioUnitario;
-        model.setValueAt(total, row, 3);
+        model.setValueAt(total, row, 4);
     }
 
     // Método para actualizar la cantidad en la base de datos
@@ -1403,8 +1433,8 @@ public class Pedido extends javax.swing.JPanel {
             DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
             
             // Obtener los datos necesarios
-            String nombre = model.getValueAt(row, 0).toString();
-            int cantidad = (int) model.getValueAt(row, 1);
+            String nombre = model.getValueAt(row, 1).toString();
+            int cantidad = (int) model.getValueAt(row, 2);
             
             // Llamar al método del objetoPedido para actualizar en la base de datos
             objetoPedido.actualizarCantidadEnBD(nombre, cantidad, row, jTable3);
@@ -1438,6 +1468,7 @@ public class Pedido extends javax.swing.JPanel {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonEliminar;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JComboBox<String> jComboBox1;
